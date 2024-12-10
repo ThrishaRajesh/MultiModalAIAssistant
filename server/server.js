@@ -107,6 +107,7 @@ app.post('/generate', async (req, res) => {
 
     if (generationType === 'text') {
       try {
+        // Corrected payload format for Gemini API text generation
         const response = await axios.post(
           `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${GEMINI_API_KEY}`,
           {
@@ -114,7 +115,7 @@ app.post('/generate', async (req, res) => {
               {
                 parts: [
                   {
-                    text: prompt,  
+                    text: prompt,  // Send the prompt as text inside the "parts" array
                   }
                 ]
               }
@@ -158,11 +159,16 @@ app.post('/generate', async (req, res) => {
           throw new Error('Failed to generate image.');
         }
     
+        // Generate a unique filename for the image
         const imageName = `${Date.now()}_generatedImage.jpg`;
         const imagePath = path.join(__dirname, 'public', 'images', imageName);
-  
+    
+        // Save the image locally
         fs.writeFileSync(imagePath, response.data);
+    
         console.log('Image saved successfully!');
+    
+        // Return the URL of the generated image so the frontend can access it
         const imageUrl = `http://localhost:5012/images/${imageName}`;
         res.json({ result: imageUrl });
       } catch (error) {
@@ -183,4 +189,3 @@ app.post('/generate', async (req, res) => {
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
 });
-
