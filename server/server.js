@@ -17,8 +17,8 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.options('*', cors(corsOptions));  // Handle OPTIONS requests for preflight
 
-const HUGGING_FACE_API_KEY = "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";
-const GEMINI_API_KEY = "AIzaSyAdrm5KmE30HQJosdroDx758GMCM9qISCg";
+const HUGGING_FACE_API_KEY = "your_huggingface_api_key";
+const GEMINI_API_KEY = "your_gemini_api_key";
 const MODELS = {
   image: 'stabilityai/stable-diffusion-3.5-large',
 };
