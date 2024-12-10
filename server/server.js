@@ -17,6 +17,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.options('*', cors(corsOptions));  // Handle OPTIONS requests for preflight
 
+// Using environment variables for API keys
 const HUGGING_FACE_API_KEY = process.env.HUGGING_FACE_API_KEY;
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 
@@ -95,6 +96,7 @@ app.get('/', (req, res) => {
     </html>
   `);
 });
+
 app.post('/generate', async (req, res) => {
   const { prompt, generationType } = req.body;
   console.log(`Received prompt: "${prompt}" for generation type: ${generationType}`);
@@ -160,13 +162,10 @@ app.post('/generate', async (req, res) => {
           throw new Error('Failed to generate image.');
         }
     
-        // Generate a unique filename for the image
         const imageName = `${Date.now()}_generatedImage.jpg`;
         const imagePath = path.join(__dirname, 'public', 'images', imageName);
-    
-        // Save the image locally
+  
         fs.writeFileSync(imagePath, response.data);
-    
         console.log('Image saved successfully!');
     
         // Return the URL of the generated image so the frontend can access it
@@ -178,14 +177,11 @@ app.post('/generate', async (req, res) => {
       }
     }
     
-    
   } catch (error) {
     console.error('Unexpected error:', error.message);
     res.status(500).json({ result: 'Unexpected error occurred.' });
   }
 });
-
-
 
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
